@@ -1,8 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!-- Customize your theme here. -->
+</style>
+<style name="dialog" parent="@android:style/Theme.Dialog">
+    <item name="android:windowFrame">@null</item>
+    <item name="android:windowIsFloating">false</item>
+    <item name="android:windowIsTranslucent">true</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:background">#00000000</item>
+    <item name="android:windowBackground">@android:color/transparent</item>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-    </style>
+</style>
+
+<style name="dialog_animation" parent="@android:style/Animation.Dialog">
+    <item name="android:windowEnterAnimation">@anim/push_left_in</item>
+    <item name="android:windowExitAnimation">@anim/push_left_out</item>
+</style>
+
 
 </resources>

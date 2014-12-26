@@ -5,13 +5,20 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import cn.ac.iie.fidoclient.Discovery;
 import cn.ac.iie.fidoclient.IUAFClient;
@@ -29,6 +36,7 @@ public class MainActivity extends Activity {
     private Discovery discovery;
     private UAFMessage message;
     private final static String TAG = "RP_Client_Main_Activity";
+    private String Key_Hash = "";
 
     private ServiceConnection conn = new ServiceConnection() {
         @Override
@@ -47,7 +55,19 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //get the APK signing certificate and compute with SHA and Base64
         setContentView(R.layout.activity_main);
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Key_Hash = Base64.encodeToString(md.digest(), Base64.DEFAULT);
+                Log.e("MY KEY HASH:", Key_Hash);
+            }
+        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
+            Log.e(TAG, "key hash computation error");
+        }
         bindButton = (Button)findViewById(R.id.bindButton);
         bindButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +98,7 @@ public class MainActivity extends Activity {
                 try{
                     discovery = mInterface.getDiscovery();
                     Toast.makeText(MainActivity.this, discovery.clientVendor, Toast.LENGTH_SHORT).show();
-                    mInterface.processUAFMessage(message, null, null, true, responseCb, errorCb);
+                    mInterface.processUAFMessage(message, Key_Hash, null, true, responseCb, errorCb);
                     mInterface.notifyUAFResult(1, "hello");
                 }catch (RemoteException e){
                     Log.e(TAG, "remoteException");

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="grey_bg">#228943</color>
+    <color name="main_button_pressed">#35ac6a</color>
+    <color name="main_green_pressed">#46a591</color>
+    <color name="main_green_pressed_two">#faa531</color>
+    <color name="main_green">#4dc0a8</color>
+    <color name="grey_divider">#708090</color>
+    <color name="bottom_bar_bg">#f2f2f2</color>
+    
+    <color name="common_grey_bg">#e5e5e5</color>
+    <color name="common_grey_text_color">#898989</color>
+    <color name="common_grey_text_color_one">#424242</color>
+    <color name="common_grey_text_color_two">#626262</color>
+    
+    <color name="common_grey_bg_one">#d1d1d1</color>
+    
+
+    <!-- search activity -->
+    <color name="item_bg_one">#004c86</color>
+    <color name="item_bg_two">#8797C9</color>
+    <color name="item_bg_thi">#E8C79D</color>
+    <color name="item_bg_fou">#CB904E</color>
+    <color name="item_bg_fiv">#D8220D</color>
+    <color name="item_bg_six">#004c86</color>
+    <color name="item_bg_sev">#004c86</color>
+    
+    <color name="search_bar_bg_green">#ff4dc0a8</color>
+    
+    
+    <!-- me fragment -->
+    <color name="item_text_one">#959595</color>
+    <color name="item_text_two">#313131</color>
+    <color name="item_text_three">#626262</color>
+</resources>

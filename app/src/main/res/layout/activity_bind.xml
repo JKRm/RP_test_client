@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Hello World, BindActivity"/>
+
+    <EditText
+            android:id="@+id/user_login_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:hint="请输入用户名"
+            android:singleLine="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"/>
+
+    <EditText
+            android:id="@+id/user_pass_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入密码"
+            android:inputType="textPassword"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
+            android:singleLine="true" />
+
+
+    <Button android:id="@+id/do_bind_bt"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
+            android:onClick="bind"
+            android:text="绑定"
+            />
+</LinearLayout>
