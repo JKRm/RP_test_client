@@ -65,7 +65,9 @@ public class MainActivity extends Activity {
                 Key_Hash = Base64.encodeToString(md.digest(), Base64.DEFAULT);
                 Log.e("MY KEY HASH:", Key_Hash);
             }
-        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, "key hash computation error");
+        }catch ( NoSuchAlgorithmException e){
             Log.e(TAG, "key hash computation error");
         }
         bindButton = (Button)findViewById(R.id.bindButton);
