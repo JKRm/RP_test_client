@@ -6,9 +6,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import org.apache.http.HttpStatus;
+
 import java.util.Random;
 
 import cn.ac.iie.interfaces.INetworkHandler;
+import cn.ac.iie.model.BindRequest;
 import cn.ac.iie.network.UserNetwork;
 import cn.ac.iie.rpclient.R;
 
@@ -48,6 +53,12 @@ public class BindActivity extends BaseActivity implements INetworkHandler {
     @Override
     public void networkCallback(String result, int httpCode, int requestTag) {
         dismissWaitDialog();
+        if(httpCode == HttpStatus.SC_OK && result != null){
+            Gson gson = new Gson();
+            BindRequest request = gson.fromJson(result, BindRequest.class);
+
+            Random rand = new Random();
+        }
     }
 
     private void do_bind(String username, String password){
