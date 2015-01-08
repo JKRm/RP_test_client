@@ -89,10 +89,14 @@ public class MainActivity extends Activity {
                 unbindService(conn);
                 unbindButton.setEnabled(false);
                 bindButton.setEnabled(true);
-                helloButton.setEnabled(true);
+                helloButton.setEnabled(false);
             }
         });
         message = new UAFMessage();
+        message.uafProtocolMessage = "{\"policy\": {\"accepted\": [], \"disallowed\": [{\"aaid\": \"1234#5678\"}]}, " +
+                "\"header\": {\"upv\": {\"mn\": 0, \"mj\": 1}, \"appid\": \"http://192.168.112.29:8000/trustedapps\"," +
+                " \"op\": \"Reg\"}, \"username\": \"admin\", \"chanllenge\": " +
+                "\"_Rmc5dhvFhCVsP3nzo6jTf3u26AZg3I7wkkCX5bb_aZ-eKdhJyXjdyBDruS84-Eyh3XoWkC10Ebmb-tz2gDG5g==\"}";
         helloButton = (Button)findViewById(R.id.hello_button);
         helloButton.setOnClickListener(new View.OnClickListener() {
             @Override
