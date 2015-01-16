@@ -24,10 +24,11 @@ import cn.ac.iie.fidoclient.Discovery;
 import cn.ac.iie.fidoclient.IUAFClient;
 import cn.ac.iie.fidoclient.IUAFErrorCallback;
 import cn.ac.iie.fidoclient.IUAFResponseCallback;
+import cn.ac.iie.fidoclient.StatusCode;
 import cn.ac.iie.fidoclient.UAFMessage;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements StatusCode {
 
     private IUAFClient mInterface;
     private Button bindButton;
@@ -105,7 +106,7 @@ public class MainActivity extends Activity {
                     discovery = mInterface.getDiscovery();
                     Toast.makeText(MainActivity.this, discovery.clientVendor, Toast.LENGTH_SHORT).show();
                     mInterface.processUAFMessage(message, Key_Hash, null, true, responseCb, errorCb);
-                    mInterface.notifyUAFResult(1, "hello");
+                    mInterface.notifyUAFResult(UAF_STATUS_OK, "hello");
                 }catch (RemoteException e){
                     Log.e(TAG, "remoteException");
                     Toast.makeText(MainActivity.this, "error", Toast.LENGTH_LONG).show();
