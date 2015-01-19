@@ -1,84 +1,90 @@
 package cn.ac.iie.network;
 
 import android.util.Log;
-import cn.ac.iie.interfaces.INetworkHandler;
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request.Method;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import org.apache.http.HttpStatus;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.Headers;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 
+
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserNetwork {
-	private static UserNetwork mInstance;
-	private Response.Listener<String> mSuccessListener;
-	private Response.ErrorListener mErrorListener;
-	private INetworkHandler callbackHandler;
-	private int requestTag;
-	
-	private UserNetwork() {
-		mSuccessListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("Volley", "response got------");
-                Log.d("Volley", response);
-				callbackHandler.networkCallback(response, HttpStatus.SC_OK, requestTag);
-            }
-        };
-		mErrorListener = new Response.ErrorListener() {
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				NetworkResponse networkResponse = error.networkResponse;
-				int httpCode = 0;
-				if (networkResponse == null) {
-					Log.e("Volley", "Did not get any response from Internet.");
-				} else {
-					httpCode = networkResponse.statusCode;
-				}
 
-				Log.e("Volley", error.getMessage(), error);
+    private static UserNetwork mInstance;
+    private final OkHttpClient client = new OkHttpClient();
 
-				callbackHandler.networkCallback(null, httpCode, requestTag);
-			}
-		}; // end error listener
+
+    private UserNetwork() {
+
 	}
 
-	public static UserNetwork getInstance(INetworkHandler callbackHandler, int requestTag) {
-		if (mInstance == null) mInstance = new UserNetwork();
-		mInstance.callbackHandler = callbackHandler;
-		mInstance.requestTag = requestTag;
+	public static UserNetwork getInstance() {
+		if (mInstance == null) {
+            mInstance = new UserNetwork();
+        }
 		return mInstance;
 	}
-	public void bind(final String username, final String password) {
+	public String bind(final String username, final String password) throws IOException {
 
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("username", username);
 		params.put("password", password);
 
-		FidoStringRequest request = new FidoStringRequest(
-				Method.POST,
-				"http://192.168.112.29:8000/bind",
-                params,
-				mInstance.mSuccessListener,
-                mInstance.mErrorListener);
-		
-		VolleySingleton.getInstance().addToRequestQueue(request);
+        RequestBody formBody = new FormEncodingBuilder()
+                .add("username", username)
+                .add("password", password)
+                .build();
+        Request request = new Request.Builder()
+                .url("http://10.10.11.102:8000/bind")
+                .post(formBody)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+//        System.out.println(response.body().string());
+
+        return response.body().string();
 	}
 
-	public void authenticate() {
+    public String uploadBindResponse(final String res) throws IOException {
 
-		Map<String, String> params = new HashMap<String, String>();
 
-		FidoStringRequest request = new FidoStringRequest(
-				Method.POST,
-				"http://192.168.112.29:8000/authenticate",
-				params,
-				mInstance.mSuccessListener,
-				mInstance.mErrorListener);
+        Request request = new Request.Builder()
+                .url("http://10.10.11.102:8000/bind")
+                .post(RequestBody.create(MediaType.parse("application/json"), res))
+                .build();
 
-		VolleySingleton.getInstance().addToRequestQueue(request);
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+//        System.out.println(response.body().string());
+
+        return response.body().string();
+    }
+
+
+    public String authenticate() throws IOException {
+
+        Request request = new Request.Builder()
+                .url("http://10.10.11.102:8000/authenticate")
+                .build();
+
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+//        Headers responseHeaders = response.headers();
+//        for (int i = 0; i < responseHeaders.size(); i++) {
+//            System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+//        }
+
+//        System.out.println(response.body().string());
+        return response.body().string();
 	}
 
 	public void getTrustApps(String appid) {
@@ -89,14 +95,6 @@ public class UserNetwork {
 
 		Map<String, String> params = new HashMap<String, String>();
 
-		FidoStringRequest request = new FidoStringRequest(
-				Method.GET,
-				appid,
-				params,
-				mInstance.mSuccessListener,
-				mInstance.mErrorListener);
-
-		VolleySingleton.getInstance().addToRequestQueue(request);
 	}
 	
 

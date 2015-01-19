@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.RemoteException;
 import android.util.Base64;
 import android.util.Log;
@@ -20,10 +21,12 @@ import com.google.gson.Gson;
 
 import org.apache.http.HttpStatus;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
+import cn.ac.iie.application.AppApplication;
 import cn.ac.iie.fidoclient.Discovery;
 import cn.ac.iie.fidoclient.IUAFClient;
 import cn.ac.iie.fidoclient.IUAFErrorCallback;
@@ -37,11 +40,10 @@ import cn.ac.iie.rpclient.R;
 /**
  * Created by wangyang on 14/12/25.
  */
-public class BindActivity extends BaseActivity implements INetworkHandler {
+public class BindActivity extends BaseActivity {
 
     EditText usernameEv;
     EditText passwordEv;
-    int requestTag;
 
     private IUAFClient mInterface;
     private String Key_Hash = "";
@@ -107,34 +109,33 @@ public class BindActivity extends BaseActivity implements INetworkHandler {
         do_bind(username, password);
     }
 
-    @Override
-    public void networkCallback(String result, int httpCode, int requestTag) {
-        dismissWaitDialog();
-        if(httpCode == HttpStatus.SC_OK && result != null){
-
-            try{
-                discovery = mInterface.getDiscovery();
-                Toast.makeText(BindActivity.this, discovery.clientVendor, Toast.LENGTH_SHORT).show();
-
-                message = new UAFMessage();
-                message.uafProtocolMessage = result;
-
-                mInterface.processUAFMessage(message, Key_Hash, null, true, responseCb, errorCb);
-                mInterface.notifyUAFResult(1, "hello");
-            }catch (RemoteException e){
-                Log.e(TAG, "remoteException");
-                Toast.makeText(BindActivity.this, "error", Toast.LENGTH_LONG).show();
-            }
-
-        }
-    }
 
     private void do_bind(String username, String password){
-        showWaitDialog("正在绑定...", true);
-        Random rand = new Random();
-        requestTag = rand.nextInt();
-        UserNetwork un = UserNetwork.getInstance(this, requestTag);
-        un.bind(username, password);
+//        showWaitDialog("正在绑定...", true);
+        UserNetwork un = UserNetwork.getInstance();
+        String response = null;
+        try {
+            response = un.bind(username, password);
+            Toast.makeText(AppApplication.getContext(), "bind successful", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            Toast.makeText(AppApplication.getContext(), "bind error", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+            return;
+        }
+
+        try{
+            discovery = mInterface.getDiscovery();
+            Toast.makeText(BindActivity.this, discovery.clientVendor, Toast.LENGTH_SHORT).show();
+
+            message = new UAFMessage();
+            message.uafProtocolMessage = response;
+            message.additionalData = "bind";
+            mInterface.processUAFMessage(message, Key_Hash, null, true, responseCb, errorCb);
+            mInterface.notifyUAFResult(1, "hello");
+        }catch (RemoteException e){
+            Log.e(TAG, "remoteException");
+            Toast.makeText(BindActivity.this, "error", Toast.LENGTH_LONG).show();
+        }
     }
 
     private final IUAFErrorCallback.Stub errorCb = new IUAFErrorCallback.Stub() {

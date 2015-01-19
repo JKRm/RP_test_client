@@ -7,4 +7,13 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Hello World, LoginActivity"/>
+    <Button android:id="@+id/do_auth_bt"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="10dp"
+        android:onClick="authenticate"
+        android:text="认证"/>
+
 </LinearLayout>
