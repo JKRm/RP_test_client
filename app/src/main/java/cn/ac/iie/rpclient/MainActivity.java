@@ -127,7 +127,7 @@ public class MainActivity extends Activity implements StatusCode {
     private final IUAFResponseCallback.Stub responseCb = new IUAFResponseCallback.Stub() {
         @Override
         public void response(UAFMessage uafResponse) throws RemoteException {
-            Toast.makeText(MainActivity.this, "response callback is invoked", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, uafResponse.uafProtocolMessage, Toast.LENGTH_SHORT).show();
             Log.i(TAG, "response callback is invoked");
         }
     };
