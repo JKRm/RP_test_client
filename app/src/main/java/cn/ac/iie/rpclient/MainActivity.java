@@ -98,6 +98,10 @@ public class MainActivity extends Activity implements StatusCode {
                 "\"header\": {\"upv\": {\"mn\": 0, \"mj\": 1}, \"appid\": \"http://192.168.112.29:8000/trustedapps\"," +
                 " \"op\": \"Reg\"}, \"username\": \"admin\", \"chanllenge\": " +
                 "\"_Rmc5dhvFhCVsP3nzo6jTf3u26AZg3I7wkkCX5bb_aZ-eKdhJyXjdyBDruS84-Eyh3XoWkC10Ebmb-tz2gDG5g==\"}";
+        message.uafProtocolMessage = "{\"policy\": {\"accepted\": [], \"disallowed\": [{\"aaid\": \"1234#5678\"}]}, " +
+                "\"header\": {\"upv\": {\"mn\": 0, \"mj\": 1}, \"appid\": \"http://127.0.0.1:8000/trustedapps\"," +
+                " \"op\": \"Auth\"}, \"challenge\": \"Wdc5YiMoc7mLJAe20ETkAQpESxuTUMjK2lY-CCDXkfkzAAQMJmJKWEFVrsvwkmDgLtNf_x-g5VpTbJXkAYy5Rg==\"," +
+                " \"transaction\": {\"content\": \"hello world\", \"contentType\": \"text/plain\"}}";
         helloButton = (Button)findViewById(R.id.hello_button);
         helloButton.setOnClickListener(new View.OnClickListener() {
             @Override
