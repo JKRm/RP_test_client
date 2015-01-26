@@ -57,7 +57,7 @@ public class UserNetwork {
 
 
         Request request = new Request.Builder()
-                .url("http://10.10.11.102:8000/bind")
+                .url("http://10.10.11.102:8000/response")
                 .post(RequestBody.create(MediaType.parse("application/json"), res))
                 .build();
 

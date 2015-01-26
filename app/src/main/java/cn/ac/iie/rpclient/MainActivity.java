@@ -63,7 +63,7 @@ public class MainActivity extends Activity implements StatusCode {
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                Key_Hash = Base64.encodeToString(md.digest(), Base64.DEFAULT);
+                Key_Hash = Base64.encodeToString(md.digest(), Base64.URL_SAFE | Base64.NO_WRAP);
                 Log.e("MY KEY HASH:", Key_Hash);
             }
         } catch (PackageManager.NameNotFoundException e) {
@@ -98,10 +98,10 @@ public class MainActivity extends Activity implements StatusCode {
                 "\"header\": {\"upv\": {\"mn\": 0, \"mj\": 1}, \"appid\": \"http://192.168.112.29:8000/trustedapps\"," +
                 " \"op\": \"Reg\"}, \"username\": \"admin\", \"chanllenge\": " +
                 "\"_Rmc5dhvFhCVsP3nzo6jTf3u26AZg3I7wkkCX5bb_aZ-eKdhJyXjdyBDruS84-Eyh3XoWkC10Ebmb-tz2gDG5g==\"}";
-//        message.uafProtocolMessage = "{\"policy\": {\"accepted\": [], \"disallowed\": [{\"aaid\": \"1234#5678\"}]}, " +
-//                "\"header\": {\"upv\": {\"mn\": 0, \"mj\": 1}, \"appid\": \"http://192.168.112.29:8000/trustedapps\"," +
-//                " \"op\": \"Auth\"}, \"challenge\": \"Wdc5YiMoc7mLJAe20ETkAQpESxuTUMjK2lY-CCDXkfkzAAQMJmJKWEFVrsvwkmDgLtNf_x-g5VpTbJXkAYy5Rg==\"," +
-//                " \"transaction\": {\"content\": \"hello world\", \"contentType\": \"text/plain\"}}";
+        message.uafProtocolMessage = "{\"policy\": {\"accepted\": [], \"disallowed\": [{\"aaid\": \"1234#5678\"}]}, " +
+                "\"header\": {\"upv\": {\"mn\": 0, \"mj\": 1}, \"appid\": \"http://192.168.112.29:8000/trustedapps\"," +
+                " \"op\": \"Auth\"}, \"challenge\": \"Wdc5YiMoc7mLJAe20ETkAQpESxuTUMjK2lY-CCDXkfkzAAQMJmJKWEFVrsvwkmDgLtNf_x-g5VpTbJXkAYy5Rg==\"," +
+                " \"transaction\": {\"content\": \"hello world\", \"contentType\": \"text/plain\"}}";
         helloButton = (Button)findViewById(R.id.hello_button);
         helloButton.setOnClickListener(new View.OnClickListener() {
             @Override

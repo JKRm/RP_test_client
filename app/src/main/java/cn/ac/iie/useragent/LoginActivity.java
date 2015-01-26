@@ -65,7 +65,7 @@ public class LoginActivity extends BaseActivity {
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                Key_Hash = Base64.encodeToString(md.digest(), Base64.DEFAULT);
+                Key_Hash = Base64.encodeToString(md.digest(), Base64.URL_SAFE | Base64.NO_WRAP);
                 Log.e("MY KEY HASH:", Key_Hash);
             }
         } catch (PackageManager.NameNotFoundException e) {
@@ -128,8 +128,19 @@ public class LoginActivity extends BaseActivity {
     private final IUAFResponseCallback.Stub responseCb = new IUAFResponseCallback.Stub() {
         @Override
         public void response(UAFMessage uafResponse) throws RemoteException {
-            Toast.makeText(AppApplication.getContext(), "response callback is invoked", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, uafResponse.uafProtocolMessage, Toast.LENGTH_SHORT).show();
             Log.i(TAG, "response callback is invoked");
+
+            UserNetwork un = UserNetwork.getInstance();
+            String response = null;
+            try {
+                response = un.uploadBindResponse(uafResponse.uafProtocolMessage);
+                Toast.makeText(AppApplication.getContext(), "bind successful", Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                Toast.makeText(AppApplication.getContext(), "bind error", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+                return;
+            }
         }
     };
 

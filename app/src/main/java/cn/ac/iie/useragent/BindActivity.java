@@ -80,7 +80,7 @@ public class BindActivity extends BaseActivity {
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                Key_Hash = Base64.encodeToString(md.digest(), Base64.DEFAULT);
+                Key_Hash = Base64.encodeToString(md.digest(), Base64.URL_SAFE | Base64.NO_WRAP);
                 Log.e("MY KEY HASH:", Key_Hash);
             }
         } catch (PackageManager.NameNotFoundException e) {
@@ -93,6 +93,12 @@ public class BindActivity extends BaseActivity {
         intent.setPackage("cn.ac.iie.fidoclient");
         bindService(intent, conn, Context.BIND_AUTO_CREATE);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(conn);
     }
 
     public void bind(View view){
@@ -131,7 +137,8 @@ public class BindActivity extends BaseActivity {
             message.uafProtocolMessage = response;
             message.additionalData = "bind";
             mInterface.processUAFMessage(message, Key_Hash, null, true, responseCb, errorCb);
-            mInterface.notifyUAFResult(1, "hello");
+            //TODO: 完成notifyUAFResult
+//            mInterface.notifyUAFResult(0, "hello");
         }catch (RemoteException e){
             Log.e(TAG, "remoteException");
             Toast.makeText(BindActivity.this, "error", Toast.LENGTH_LONG).show();
@@ -149,8 +156,23 @@ public class BindActivity extends BaseActivity {
     private final IUAFResponseCallback.Stub responseCb = new IUAFResponseCallback.Stub() {
         @Override
         public void response(UAFMessage uafResponse) throws RemoteException {
-            Toast.makeText(BindActivity.this, "response callback is invoked", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BindActivity.this, uafResponse.uafProtocolMessage, Toast.LENGTH_SHORT).show();
             Log.i(TAG, "response callback is invoked");
+
+            UserNetwork un = UserNetwork.getInstance();
+            String response = null;
+            try {
+                response = un.uploadBindResponse(uafResponse.uafProtocolMessage);
+                Toast.makeText(AppApplication.getContext(), "bind successful", Toast.LENGTH_LONG).show();
+                if(response != null && response.length() != 0){
+                    mInterface.notifyUAFResult(0, response);
+                }
+            } catch (IOException e) {
+                Toast.makeText(AppApplication.getContext(), "bind error", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+                return;
+            }
+
         }
     };
 }
