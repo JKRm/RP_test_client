@@ -110,7 +110,7 @@ public class LoginActivity extends BaseActivity {
             message.uafProtocolMessage = response;
             message.additionalData = "authenticate";
             mInterface.processUAFMessage(message, Key_Hash, null, true, responseCb, errorCb);
-            mInterface.notifyUAFResult(1, "hello");
+//            mInterface.notifyUAFResult(1, "hello");
         }catch (RemoteException e){
             Log.e(TAG, "remoteException");
             Toast.makeText(AppApplication.getContext(), "error", Toast.LENGTH_LONG).show();
