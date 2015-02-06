@@ -37,16 +37,16 @@
                 android:text="认证"
                 />
 
-        <Button android:id="@+id/local_auth"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/login_bt"
-            android:onClick="local_auth"
-            android:text="本地认证器"
-            />
+        <!--<Button android:id="@+id/local_auth"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="45dp"-->
+            <!--android:layout_marginLeft="16dp"-->
+            <!--android:layout_marginRight="16dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_below="@id/login_bt"-->
+            <!--android:onClick="local_auth"-->
+            <!--android:text="本地认证器"-->
+            <!--/>-->
 
     </RelativeLayout>
 </LinearLayout>

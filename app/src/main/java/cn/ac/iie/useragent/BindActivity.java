@@ -1,7 +1,9 @@
 package cn.ac.iie.useragent;
 
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
@@ -156,7 +158,7 @@ public class BindActivity extends BaseActivity {
     private final IUAFResponseCallback.Stub responseCb = new IUAFResponseCallback.Stub() {
         @Override
         public void response(UAFMessage uafResponse) throws RemoteException {
-            Toast.makeText(BindActivity.this, uafResponse.uafProtocolMessage, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(BindActivity.this, uafResponse.uafProtocolMessage, Toast.LENGTH_SHORT).show();
             Log.i(TAG, "response callback is invoked");
 
             UserNetwork un = UserNetwork.getInstance();
@@ -166,6 +168,7 @@ public class BindActivity extends BaseActivity {
                 Toast.makeText(AppApplication.getContext(), "bind successful", Toast.LENGTH_LONG).show();
                 if(response != null && response.length() != 0){
                     mInterface.notifyUAFResult(0, response);
+                    dialog();
                 }
             } catch (IOException e) {
                 Toast.makeText(AppApplication.getContext(), "bind error", Toast.LENGTH_LONG).show();
@@ -175,4 +178,24 @@ public class BindActivity extends BaseActivity {
 
         }
     };
+
+    protected void dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(BindActivity.this);
+        builder.setMessage("绑定成功");
+        builder.setTitle("恭喜");
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                BindActivity.this.finish();
+                }
+            });
+//        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//                }
+//            });
+        builder.create().show();
+        }
 }
